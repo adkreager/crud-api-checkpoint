@@ -29,19 +29,18 @@ public class UsersController {
     @PatchMapping("/users/{id}")
     public User patchUserById(@PathVariable("id") String id,
                               @RequestBody User user) {
+        User newUser = this.repository.findByUserId(Long.parseLong(id));
         String email = user.getEmail();
         String password = user.getPassword();
 
-//        if (email != null) {
-//            this.repository.updateEmailByUserId(Long.parseLong(id), email);
-//        }
-//        if (password != null) {
-//            this.repository.updatePasswordByUserId(Long.parseLong(id), password);
-//        }
-
-//        return this.repository.findByUserId(Long.parseLong(id));
-        return user;
+          if (email != null) {
+            newUser.setEmail(email);
+          }
+          if (password != null) {
+            newUser.setPassword(password);
+          }
+          this.repository.deleteUser(Long.parseLong(id));
+          this.repository.save(newUser);
+          return this.repository.findByUserId(Long.parseLong(id));
     }
-
-
 }
